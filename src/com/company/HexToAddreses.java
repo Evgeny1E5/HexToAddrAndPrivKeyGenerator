@@ -1,5 +1,7 @@
 package com.company;
 
+import org.bitcoinj.core.*;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
@@ -82,9 +84,11 @@ public class HexToAddreses {
 
 
     }
-    public static void hexToUncompressed(ECKey k2) throws Exception{
+    public static String pubKeyToUncompressed(String pubkey) throws Exception{
 
-        byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(k2.getPublicKeyAsHex()));
+        //byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(k2.getPublicKeyAsHex()));
+        byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(pubkey));
+
         String step2Hex = bytesToHex(step2Bytes);
         //System.out.println(step2Hex);
         byte[] step3Bytes = Ripemd160.getHash(hexStringToByteArray(step2Hex));
@@ -100,10 +104,12 @@ public class HexToAddreses {
         //System.out.println(step7Hex);
         String step8Hex = step4Hex + step7Hex;
         //System.out.println(step8Hex);
-        System.out.println("Uncompressed address \n" + new Base58().encode(hexStringToByteArray(step8Hex)));
+        return new Base58().encode(hexStringToByteArray(step8Hex));
     }
-    public static void hexToCompressed(ECKey k2) throws Exception{
-        byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(k2.getPublicKeyAsHex()));
+    public static String pubKeyToCompressed(String pubkey) throws Exception{
+
+        //byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(k2.getPublicKeyAsHex()));
+        byte[] step2Bytes = MessageDigest.getInstance("SHA-256").digest(hexStringToByteArray(pubkey));
         String step2Hex = bytesToHex(step2Bytes);
         //System.out.println(step2Hex);
         byte[] step3Bytes = Ripemd160.getHash(hexStringToByteArray(step2Hex));
@@ -119,7 +125,7 @@ public class HexToAddreses {
         //System.out.println(step7Hex);
         String step8Hex = step4Hex + step7Hex;
         //System.out.println(step8Hex);
-        System.out.println("Compressed address \n" + new Base58().encode(hexStringToByteArray(step8Hex)));
+        return new Base58().encode(hexStringToByteArray(step8Hex));
     }
     public static String hexToUncompressed(String hex130) throws Exception{
         BigInteger priv = new BigInteger(hex130,16);
